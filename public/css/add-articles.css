@@ -1,7 +1,7 @@
 .form-container {
     display: flex;
     flex-flow: column;
-    width: 60rem;
+    width: 70rem;
   }
   
   .form-container h1 {
@@ -39,4 +39,65 @@
     display: flex;
     flex-flow: row nowrap;
     justify-content: flex-end;
+  }
+
+
+  /* Media Queries */
+
+/* Pour les écrans de taille moyenne (tablettes) */
+@media (max-width: 768px) {
+    .form-container {
+      width: 60rem;
+      padding: 0 1rem;
+    }
+
+    .form-actions {
+      display: flex;
+      flex-flow: row nowrap;
+      padding-bottom: 3rem;
+      /* justify-content: flex-end; */
+    }
+    /* .form-control input {
+      border: var(--border);
+      border-radius: 3px;
+      padding: 1rem 1.5rem;
+    }
+    
+    .form-control select {
+      border: var(--border);
+      padding: 1rem 1.5rem;
+    }
+    
+    .form-control textarea {
+      border: var(--border);
+      padding: 1rem 1.5rem;
+      min-height: 20rem;
+    }
+   */
+  
+    /* .form-control input, .form-control select, .form-control textarea {
+      padding: 0.5rem 1rem;
+    }
+   */
+    
+  }
+
+
+  
+  /* Pour les petits écrans (mobiles) */
+  @media (max-width: 640px) {
+    .form-container {
+      width: 40rem;
+      /* padding: 0 0.5rem; */
+    }
+  
+    .form-control input, .form-control select, .form-control textarea {
+      padding: 0.5rem;
+    }
+  
+    .form-actions {
+      flex-flow: column;
+      align-items: stretch;
+      
+    }
   }
