@@ -122,9 +122,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <div class="form-control">
             <label for="category">Catégorie</label>
             <select name="category" id="category">
-              <option value="history">Histoire et Culture</option>
+              <option value="histoire">Histoire et Culture</option>
               <option value="attractions">Attractions Touristiques</option>
-              <option value="events">Évènement et Festivals</option>
+              <option value="evenement">Évènement et Festivals</option>
             </select>
             <?php if ($errors['category']) : ?>
               <p class="text-danger"> <?= $errors['category'] ?></p>
