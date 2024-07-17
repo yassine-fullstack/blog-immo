@@ -9,15 +9,25 @@ $errors = [
   'image' => '',
   'category' => '',
   'content' => ''
-
 ];
+$category = '';
+if (file_exists($filename)) {
+  $articles = json_decode(file_get_contents($filename), true) ?? [];
+}
 
-$articles = [];
+$_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$id = $_GET['id'] ?? '';
+if ($id) {
+  $articleIndex = array_search($id, array_column($articles, 'id'));
+  $article = $articles[$articleIndex];
+  $title = $article['title'];
+  $image = $article['image'];
+  $category = $article['category'];
+  $content = $article['content'];
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  if (file_exists($filename)) {
-    $articles = json_decode(file_get_contents($filename), true) ?? [];
-  }
+
   $_POST = filter_input_array(INPUT_POST, [
     'title' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
     'image' => FILTER_SANITIZE_URL,
@@ -26,14 +36,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       'filter' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
       'flags' => FILTER_FLAG_NO_ENCODE_QUOTES
     ]
-
-
   ]);
-
   $title = $_POST['title'] ?? '';
   $image = $_POST['image'] ?? '';
   $category = $_POST['category'] ?? '';
   $content = $_POST['content'] ?? '';
+
 
   if (!$title) {
     $errors['title'] = ERROR_REQUIRED;
@@ -57,45 +65,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors['content'] = ERROR_CONTENT_TOO_SHORT;
   }
 
-  // echo "<pre>";
   if (empty(array_filter($errors, fn ($e) => $e !== ''))) {
-
-    $articles = [...$articles, [
-
-      'id' => time(),
-      'title' => $title,
-      'image' => $image,
-      'category' => $category,
-      'content' => $content
-
-    ]];
-
-    file_put_contents($filename, json_encode($articles, JSON_PRETTY_PRINT));
-    header('Location:/');
-
-    // echo "c'est ok";
+    if ($id) {
+      $articles[$articleIndex]['title'] = $title;
+      $articles[$articleIndex]['image'] = $image;
+      $articles[$articleIndex]['category'] = $category;
+      $articles[$articleIndex]['content'] = $content;
+    } else {
+      $articles = [...$articles, [
+        'title' => $title,
+        'image' => $image,
+        'category' => $category,
+        'content' => $content,
+        'id' => time()
+      ]];
+    }
+    file_put_contents($filename, json_encode($articles));
+    header('Location: /');
   }
-  //else {
-  //     print_r($errors);
-  //   }
-
-  //   echo "</pre>";
 }
-
-
-
 
 ?>
 
-<!DOCTYPE html>
 
-<html lang="fr">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
   <?php require_once 'includes/head.php' ?>
-  <link rel="stylesheet" href="/public/css/add-articles.css">
-
-  <title>Créer un article</title>
+  <link rel="stylesheet" href="/public/css/form-article.css">
+  <title><?= $id ? 'Modifier' : 'Créer' ?> un article</title>
 </head>
 
 <body>
@@ -103,43 +102,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php require_once 'includes/header.php' ?>
     <div class="content">
       <div class="block p-20 form-container">
-        <h1>Ecrire un article</h1>
-        <form action="/add-article.php" method="post">
+        <h1><?= $id ? 'Modifier' : 'Écrire' ?> un article</h1>
+        <form action="/form-article.php<?= $id ? "?id=$id" : '' ?>" , method="POST">
           <div class="form-control">
             <label for="title">Titre</label>
-            <input type="text" name="title" id="title" value=<?= $title ?? '' ?>>
+            <input type="text" name="title" id="title" value="<?= $title ?? '' ?>">
             <?php if ($errors['title']) : ?>
-              <p class="text-danger"> <?= $errors['title'] ?></p>
+              <p class="text-danger"><?= $errors['title'] ?></p>
             <?php endif; ?>
           </div>
           <div class="form-control">
             <label for="image">Image</label>
-            <input type="text" name="image" id="image" value=<?= $image ?? '' ?>>
+            <input type="text" name="image" id="image" value="<?= $image ?? '' ?>">
             <?php if ($errors['image']) : ?>
-              <p class="text-danger"> <?= $errors['image'] ?></p>
+              <p class="text-danger"><?= $errors['image'] ?></p>
             <?php endif; ?>
           </div>
           <div class="form-control">
             <label for="category">Catégorie</label>
             <select name="category" id="category">
-              <option value="histoire">Histoire et Culture</option>
-              <option value="attractions">Attractions Touristiques</option>
-              <option value="evenement">Évènement et Festivals</option>
+              <option <?= !$category || $category === 'histoire' ? 'selected' : '' ?> value="histoire">histoire</option>
+              <option <?= $category === 'attractions' ? 'selected' : '' ?> value="attractions">attractions</option>
+              <option <?= $category === 'evenement' ? 'selected' : '' ?> value="evenement">evenement</option>
             </select>
             <?php if ($errors['category']) : ?>
-              <p class="text-danger"> <?= $errors['category'] ?></p>
+              <p class="text-danger"><?= $errors['category'] ?></p>
             <?php endif; ?>
           </div>
           <div class="form-control">
-            <label for="content">Contenu</label>
-            <textarea name="content" id="content" value=<?= $content ?? '' ?>> </textarea>
+            <label for="content">Content</label>
+            <textarea name="content" id="content"><?= $content ?? '' ?></textarea>
             <?php if ($errors['content']) : ?>
-              <p class="text-danger"> <?= $errors['content'] ?></p>
+              <p class="text-danger"><?= $errors['content'] ?></p>
             <?php endif; ?>
           </div>
           <div class="form-actions">
-            <button class="btn btn-secondary" type="button">Annuler</button>
-            <button class="btn btn-primary" type="submit">Sauvegarder</button>
+            <a href="/" class="btn btn-secondary" type="button">Annuler</a>
+            <button class="btn btn-primary" type="submit"><?= $id ? 'Modifier' : 'Sauvegarder' ?></button>
           </div>
         </form>
       </div>
