@@ -1,13 +1,14 @@
 <?php
-$filename = __DIR__ . '/data/articles.json';
-$articles = [];
+$pdo = require_once 'database.php';
+$statement = $pdo->prepare('SELECT * FROM article');
+$statement->execute();
+$articles = $statement->fetchAll();
 $categories = [];
 
 $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $selectedCat = $_GET['cat'] ?? '';
 
-if (file_exists($filename)) {
-  $articles = json_decode(file_get_contents($filename), true) ?? [];
+if (count($articles)) {
   $cattmp = array_map(fn ($a) => $a['category'],  $articles);
   $categories = array_reduce($cattmp, function ($acc, $cat) {
     if (isset($acc[$cat])) {
@@ -19,22 +20,24 @@ if (file_exists($filename)) {
   }, []);
   $articlePerCategories = array_reduce($articles, function ($acc, $article) {
     if (isset($acc[$article['category']])) {
-      $acc[$article['category']][] = $article;
+      $acc[$article['category']] = [...$acc[$article['category']], $article];
     } else {
       $acc[$article['category']] = [$article];
     }
     return $acc;
   }, []);
 }
+
+
 ?>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
   <?php require_once 'includes/head.php' ?>
   <link rel="stylesheet" href="/public/css/index.css">
-  <title>Blog immo</title>
+  <title>Blog</title>
 </head>
 
 <body>
@@ -42,18 +45,12 @@ if (file_exists($filename)) {
     <?php require_once 'includes/header.php' ?>
     <div class="content">
       <div class="newsfeed-container">
-        <div class="category-container">
-          <ul class="category-container">
-            <li class=<?= $selectedCat ? '' : 'cat-active' ?>>
-              <a href="/">Tous les articles <span class="small">(<?= count($articles) ?>)</span></a>
-            </li>
-            <?php foreach ($categories as $catName => $catNum) : ?>
-              <li class=<?= $selectedCat ===  $catName ? 'cat-active' : '' ?>>
-                <a href="/?cat=<?= $catName ?>"> <?= $catName ?><span class="small">(<?= $catNum ?>)</span> </a>
-              </li>
-            <?php endforeach; ?>
-          </ul>
-        </div>
+        <ul class="category-container">
+          <li class=<?= $selectedCat ? '' : 'cat-active' ?>><a href="/">Tous les articles <span class="small">(<?= count($articles) ?>)</span></a></li>
+          <?php foreach ($categories as $catName => $catNum) : ?>
+            <li class=<?= $selectedCat ===  $catName ? 'cat-active' : '' ?>><a href="/?cat=<?= $catName ?>"> <?= $catName ?><span class="small">(<?= $catNum ?>)</span> </a></li>
+          <?php endforeach; ?>
+        </ul>
         <div class="newsfeed-content">
           <?php if (!$selectedCat) : ?>
             <?php foreach ($categories as $cat => $num) : ?>

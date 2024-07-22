@@ -121,9 +121,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <div class="form-control">
             <label for="category">Catégorie</label>
             <select name="category" id="category">
-              <option <?= !$category || $category === 'histoire' ? 'selected' : '' ?> value="histoire">histoire</option>
-              <option <?= $category === 'attractions' ? 'selected' : '' ?> value="attractions">attractions</option>
-              <option <?= $category === 'evenement' ? 'selected' : '' ?> value="evenement">evenement</option>
+              <option <?= !$category || $category === 'Histoire' ? 'selected' : '' ?> value="Histoire">Histoire et Culture</option>
+              <option <?= $category === 'Attractions' ? 'selected' : '' ?> value="Attractions">Attractions Touristiques</option>
+              <option <?= $category === 'Festivals' ? 'selected' : '' ?> value="Festivals"> Évenement et Festivals</option>
+              <option <?= $category === 'Gastronomie' ? 'selected' : '' ?> value="Gastronomie">Gastronomie</option>
+              <option <?= $category === 'Shopping' ? 'selected' : '' ?> value="Shopping">Shopping</option>
             </select>
             <?php if ($errors['category']) : ?>
               <p class="text-danger"><?= $errors['category'] ?></p>
