@@ -1,5 +1,5 @@
 <?php
-$pdo = require_once 'database.php';
+$pdo = require_once './database.php';
 $statement = $pdo->prepare('SELECT * FROM article');
 $statement->execute();
 $articles = $statement->fetchAll();
