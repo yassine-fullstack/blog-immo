@@ -1,28 +1,8 @@
 <?php
-$pdo = require_once 'database.php';
-$statementReadOne = $pdo->prepare('SELECT * FROM article WHERE id = :id');
-$statementCreateOne = $pdo->prepare('
-  INSERT INTO article (
-    title,
-    category,
-    content,
-    image
-  ) VALUES (
-    :title,
-    :category,
-    :content,
-    :image
-  )
-');
-$statementUpdateOne = $pdo->prepare('
-  UPDATE article
-  SET
-    title=:title,
-    category=:category,
-    content=:content,
-    image=:image
-  WHERE id=:id;
-');
+$articleDB = require_once __DIR__ . '/database/models/ArticleDB.php';
+
+
+
 const ERROR_REQUIRED = 'Veuillez renseigner ce champ';
 const ERROR_TITLE_TOO_SHORT = 'Le titre est trop court';
 const ERROR_CONTENT_TOO_SHORT = 'L\'article est trop court';
@@ -39,9 +19,8 @@ $category = '';
 $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $id = $_GET['id'] ?? '';
 if ($id) {
-  $statementReadOne->bindValue(':id', $id);
-  $statementReadOne->execute();
-  $article = $statementReadOne->fetch();
+
+  $article = $articleDB->fetchOne($id);
   $title = $article['title'];
   $image = $article['image'];
   $category = $article['category'];
@@ -89,18 +68,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   if (empty(array_filter($errors, fn ($e) => $e !== ''))) {
     if ($id) {
-      $statementUpdateOne->bindValue(':title', $title);
-      $statementUpdateOne->bindValue(':image', $image);
-      $statementUpdateOne->bindValue(':category', $category);
-      $statementUpdateOne->bindValue(':content', $content);
-      $statementUpdateOne->bindValue(':id', $id);
-      $statementUpdateOne->execute();
+      $article['title'] = $title;
+      $article['image'] = $image;
+      $article['category'] = $category;
+      $article['content'] = $content;
+      $articleDB->updateOne($article);
     } else {
-      $statementCreateOne->bindValue(':title', $title);
-      $statementCreateOne->bindValue(':image', $image);
-      $statementCreateOne->bindValue(':category', $category);
-      $statementCreateOne->bindValue(':content', $content);
-      $statementCreateOne->execute();
+
+      $articleDB->createOne([
+        'title' => $title,
+        'image' => $image,
+        'category' => $category,
+        'content' => $content
+      ]);
     }
     header('Location: /');
   }
