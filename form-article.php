@@ -7,7 +7,7 @@ const ERROR_REQUIRED = 'Veuillez renseigner ce champ';
 const ERROR_TITLE_TOO_SHORT = 'Le titre est trop court';
 const ERROR_CONTENT_TOO_SHORT = 'L\'article est trop court';
 const ERROR_IMAGE_URL = 'L\'image doit être une url valide';
-$filename = __DIR__ . '/data/articles.json';
+// $filename = __DIR__ . '/data/articles.json';
 $errors = [
   'title' => '',
   'image' => '',
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <head>
   <?php require_once 'includes/head.php' ?>
-  <link rel="stylesheet" href="/public/css/form-article.css">
+  <!-- <link rel="stylesheet" href="/public/css/form-article.css"> -->
   <title><?= $id ? 'Modifier' : 'Créer' ?> un article</title>
 </head>
 
