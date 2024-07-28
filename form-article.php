@@ -1,8 +1,12 @@
 <?php
+require_once __DIR__ . '/database/database.php';
+require_once __DIR__ . '/database/security.php';
+
+$currentUser = isLoggedin();
+if (!$currentUser) {
+  header('Location:/');
+}
 $articleDB = require_once __DIR__ . '/database/models/ArticleDB.php';
-
-
-
 const ERROR_REQUIRED = 'Veuillez renseigner ce champ';
 const ERROR_TITLE_TOO_SHORT = 'Le titre est trop court';
 const ERROR_CONTENT_TOO_SHORT = 'L\'article est trop court';
@@ -72,6 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $article['image'] = $image;
       $article['category'] = $category;
       $article['content'] = $content;
+      $article['author'] = $currentUser['id'];
       $articleDB->updateOne($article);
     } else {
 
@@ -79,7 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'title' => $title,
         'image' => $image,
         'category' => $category,
-        'content' => $content
+        'content' => $content,
+        'author' => $currentUser['id']
       ]);
     }
     header('Location: /');

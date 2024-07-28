@@ -15,12 +15,14 @@ class AtricleDB
                title,
                category,
                content,
-               image
+               image,
+               author
             ) VALUES (
                 :title,
                 :category,
                 :content,
-                :image
+                :image,
+                :author 
             )
        ');
 
@@ -30,7 +32,8 @@ class AtricleDB
                 title=:title,
                 category=:category,
                 content=:content,
-                image=:image
+                image=:image,
+                author=:author
             WHERE id=:id;
       
         ');
@@ -66,6 +69,7 @@ class AtricleDB
         $this->statementCreateOne->bindValue(':image', $article['image']);
         $this->statementCreateOne->bindValue(':category', $article['category']);
         $this->statementCreateOne->bindValue(':content', $article['content']);
+        $this->statementCreateOne->bindValue(':author', $article['author']);
         $this->statementCreateOne->execute();
         return $this->fetchOne($this->pdo->lastInsertId());
         
@@ -78,6 +82,7 @@ class AtricleDB
         $this->statementUpdateOne->bindValue(':category', $article['category']);
         $this->statementUpdateOne->bindValue(':content', $article['content']);
         $this->statementUpdateOne->bindValue(':id', $article['id']);
+        $this->statementUpdateOne->bindValue(':author', $article['author']);
         $this->statementUpdateOne->execute();
         return $article;
     }
