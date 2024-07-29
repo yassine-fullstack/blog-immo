@@ -38,8 +38,8 @@ class AtricleDB
       
         ');
 
-        $this->statementReadOne = $pdo->prepare('SELECT * FROM article WHERE id = :id');
-        $this->statementReadAll = $pdo->prepare('SELECT * FROM article');
+        $this->statementReadOne = $pdo->prepare('SELECT article.*, user.firstname, user.lastname FROM article LEFT JOIN user ON article.author=user.id WHERE article.id = :id');
+        $this->statementReadAll = $pdo->prepare('SELECT article.*, user.firstname, user.lastname FROM article LEFT JOIN user ON article.author=user.id');
         $this->statementDeleteOne = $pdo->prepare('DELETE FROM article WHERE id=:id');
     }
 
@@ -72,7 +72,6 @@ class AtricleDB
         $this->statementCreateOne->bindValue(':author', $article['author']);
         $this->statementCreateOne->execute();
         return $this->fetchOne($this->pdo->lastInsertId());
-        
     }
 
     public function updateOne($article)
