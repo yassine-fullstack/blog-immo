@@ -53,6 +53,7 @@
 
 .category-container {
   flex: 200px;
+  margin: 8px;
 }
 
 .category-container li {
