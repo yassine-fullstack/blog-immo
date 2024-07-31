@@ -1,10 +1,10 @@
 <?php
 require_once __DIR__ . '/database/database.php';
-require_once __DIR__ . '/database/security.php';
+$authDB = require_once __DIR__ . '/database/security.php';
 $articleDB = require_once __DIR__ . '/database/models/ArticleDB.php';
 
 $articles = [];
-$currentUser = isLoggedin();
+$currentUser = $authDB->isLoggedin();
 if (!$currentUser) {
   header('Location:/');
 }
@@ -33,10 +33,10 @@ $articles = $articleDB->fetchUserArticle($currentUser['id']);
         <ul>
           <li>
             <strong>Prenom: </strong>
-            <p> <?= $currentUser['firstname']  ?></p>
+           <p> <?= $currentUser['firstname']  ?></p>
           </li>
           <li>
-            <strong>Nom: </strong>
+             <strong>Nom: </strong>
             <p> <?= $currentUser['lastname']  ?></p>
           </li>
           <li>

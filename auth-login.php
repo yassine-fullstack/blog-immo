@@ -1,5 +1,6 @@
 <?php
-$pdo = require_once './database/database.php';
+require __DIR__ . '/database/database.php';
+$authDB = require_once './database/security.php';
 const ERROR_REQUIRED = 'Veuillez renseigner ce champ';
 const ERROR_PASSWORD_MISMATCH = 'Le mot de passe n\'est pas valide';
 const ERROR_EMAIL_INVALID = 'L\'email n\'est pas valide';
@@ -26,24 +27,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors['password'] = ERROR_REQUIRED;
   }
   if (empty(array_filter($errors, fn ($e) => $e !== ''))) {
-    $statementUser = $pdo->prepare('SELECT * FROM user WHERE email=:email');
-    $statementUser->bindValue(':email', $email);
-    $statementUser->execute();
-    $user = $statementUser->fetch();
+
+    $user = $authDB->getUserFromEmail($email);
     if (!$user) {
       $errors['email'] = ERROR_EMAIL_UNKOWN;
     } else {
       if (!password_verify($password, $user['password'])) {
         $errors['password'] = ERROR_PASSWORD_MISMATCH;
       } else {
-        $statementSession = $pdo->prepare('INSERT INTO session VALUES (
-          DEFAULT,
-          :userid
-        )');
-        $statementSession->bindValue(':userid', $user['id']);
-        $statementSession->execute();
-        $sessionId = $pdo->lastInsertId();
-        setcookie('session', $sessionId, time() + 60 * 60 * 24 * 14, '', '', false, true);
+        $authDB->login($user['id']);
         header('Location: /');
       }
     }
