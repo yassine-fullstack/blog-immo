@@ -69,3 +69,12 @@
   color: var(--primary);
   font-weight: 700;
 }
+
+
+@media only screen and (max-width: 800px) {
+
+  .category-container {
+   display: none;
+  }
+  
+}
