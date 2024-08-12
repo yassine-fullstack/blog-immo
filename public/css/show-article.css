@@ -45,3 +45,168 @@
 
 }
 
+@media (max-width: 1130px) {
+
+    .background-image{
+        border-right-width: 50px;
+    }
+    
+    .article-cover-img {
+        height: 50rem; 
+        width: 100rem; 
+        border-right-width: 5rem;
+    }
+
+    .article-author {
+
+        margin-right: 2rem;
+      }
+
+    .article-content{
+
+        text-align:justify;
+        margin-right: 1rem;
+    }
+    .article-title {
+        margin-left:1rem ;
+    }
+ 
+   
+  }
+
+@media only screen and (max-width: 900px) {
+
+    /* .article-container{
+
+    padding-right: 1rem;
+    } */
+
+    .article-cover-img {
+        height: 50rem; 
+        width: 90rem; 
+        margin-right: 1rem;
+        
+    }
+    .article-content{
+
+        text-align:justify;
+        margin-right: 1rem;
+    }
+    .article-title {
+        margin-left:1rem ;
+    }
+
+    
+      
+}
+
+ @media only screen and (max-width: 810px) {
+
+    .article-cover-img {
+        height: 50rem; 
+        width: 85rem; 
+           
+    }
+    .article-content{
+
+        text-align:justify;
+        margin-right: 2rem;
+        margin-left: 2rem;
+    }
+    .article-title {
+        margin-left:1rem ;
+    }
+
+   
+          
+}
+
+@media only screen and (max-width: 750px) {
+
+    .article-cover-img {
+        height: 40rem; 
+        width: 80rem; 
+               
+    }
+    .article-title {
+        margin-left:1rem ;
+    }
+    .article-content{
+
+        text-align:justify;
+        margin-right: 1rem;
+    }
+        
+}
+@media only screen and (max-width:640px) {
+
+    .article-cover-img {
+        height: 40rem; 
+        width: 65rem; 
+               
+    }
+    .article-title {
+        margin-left:1rem ;
+    }
+    .article-content{
+
+        text-align:justify;
+        margin-right: 1rem;
+    }
+   
+                  
+}
+
+
+@media only screen and (max-width: 606px) {
+
+    .article-cover-img {
+        height: 40rem; 
+        width: 60rem; 
+               
+    }
+    .article-title {
+        margin-left:1rem ;
+    }
+    .article-content{
+
+        text-align:justify;
+        margin-right: 1rem;
+    }
+  
+                  
+}
+
+
+
+@media only screen and (max-width:550px) {
+
+    .article-cover-img {
+        height: 30rem; 
+        width: 50rem; 
+               
+    }
+    .article-title {
+        margin-left:1rem ;
+    }
+    .article-content{
+
+        text-align:justify;
+        margin-right: 1rem;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+
+    .article-cover-img {
+        height: 30rem; 
+        width: 50rem; 
+               
+    }
+    .article-title {
+        margin-left:1rem ;
+    }
+    
+   
+                  
+}

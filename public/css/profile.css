@@ -31,3 +31,29 @@
     margin-bottom:1rem ;
 
 }
+
+@media only screen and (max-width: 800px) {
+
+    .articles-list ul li{
+       
+       margin-right: 1rem;
+    
+    }
+
+}
+
+@media only screen and (max-width: 450px) {
+
+    .articles-list ul li{
+       flex-flow: column;
+       margin-right: 1rem;
+       margin-left: 1rem;
+    
+    }
+
+    .articles-actions{
+        margin-top:1rem ;
+        
+    }
+      
+}
